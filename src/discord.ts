@@ -2,14 +2,14 @@
  * The following methods all facilitate OAuth2 communication with Discord.
  * See https://discord.com/developers/docs/topics/oauth2 for more details.
  */
-import crypto from 'crypto';
-import storage from './storage';
+import crypto from "crypto";
+import storage from "./storage";
 
 export type Tokens = {
-  access_token: string,
-  refresh_token: string,
-  expires_at: number
-}
+  access_token: string;
+  refresh_token: string;
+  expires_at: number;
+};
 
 /*
  * Generate the url which the user will be directed to in order to approve the
@@ -87,8 +87,7 @@ async function getAccessToken(userId: string, tokens: Tokens) {
     } else {
       console.error(
         `Error refreshing access token: [${response.status}] ${response.statusText}`
-
-      )
+      );
     }
   }
   return tokens.access_token;
@@ -114,7 +113,6 @@ async function getUserData(tokens: Tokens) {
   }
 }
 
-
 /*
  * Given metadata that matches the schema, push that data to Discord on behalf
  * of the current user.
@@ -123,12 +121,12 @@ async function pushMetadata(userId: string, tokens: Tokens, metadata: any) {
   const url = `https://discord.com/api/v10/users/@me/applications/${process.env.DISCORD_CLIENT_ID}/role-connection`;
   const accessToken = await getAccessToken(userId, tokens);
   const body: {
-    platform_name: string,
-    platform_username: string,
-    metadata: any
+    platform_name: string;
+    platform_username: string;
+    metadata: any;
   } = {
-    platform_name: "Statistiche Bedwars",
-    platform_username: "8hi",
+    platform_name: "Title",
+    platform_username: "Subtitle",
     metadata,
   };
   const response = await fetch(url, {
@@ -162,8 +160,17 @@ async function getMetadata(userId: string, tokens: Tokens) {
     const data = await response.json();
     return data;
   } else {
-    throw new Error(`Error getting discord metadata: [${response.status}] ${response.statusText}`);
+    throw new Error(
+      `Error getting discord metadata: [${response.status}] ${response.statusText}`
+    );
   }
 }
 
-export default { getOAuthUrl, getOAuthTokens, getAccessToken, getUserData, pushMetadata, getMetadata };
+export default {
+  getOAuthUrl,
+  getOAuthTokens,
+  getAccessToken,
+  getUserData,
+  pushMetadata,
+  getMetadata,
+};
